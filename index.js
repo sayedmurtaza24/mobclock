@@ -189,7 +189,7 @@ const goToSecondPage = () => {
     if (!mobNameInput.value.trim()) return alert('Please enter your mob name!')
     localStorage.setItem('mob-name', capitalize(mobNameInput.value));
     transitionToPage(page2, page1);
-    setTimeout(() => mobMember.focus(), 300)
+    // setTimeout(() => mobMember.focus(), 300)
 }
 
 goAheadBtn.addEventListener('click', goToSecondPage)
