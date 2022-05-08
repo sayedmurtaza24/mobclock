@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="clock.png" />
+    <title>Mob Timer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko&family=Water+Brush&display=swap');
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="contents">
+        <h1>Mob Clock</h1>
+        <p>Made by 🌶.js mob</p>
+        <div class="pageWrapper">
+            <div class="page page-1">
+                <h2>What is your mob name? 👾</h2>
+                <div class="space"></div>
+                <input id="mob-name" type="text" placeholder="Enter your mob name" />
+                <div class="space"></div>
+                <button id="go-ahead">Go Ahead! 👉</button>
+            </div>
+            <div class="page page-2 page-next">
+                <h2>Who is in your mob? 😈</h2>
+                <div id="members-list"></div>
+                <input id="mob-member" type="text" placeholder="Enter a mob member" />
+                <button id="add-member">Add</button>
+                <div class="space"></div>
+                <button id="back-btn">👈</button>
+                <button id="jump-ahead">Move forward! 💨</button>
+            </div>
+            <div class="page page-3 page-next">
+                <h2>How long for each one? 🥱</h2>
+                <div class="space"></div>
+                <div class="flex">
+                    <button class="clock-button minus-button">-1</button>
+                    <div>
+                        <div id="minutes">5</div>
+                        <h3>minutes</h3>
+                    </div>
+                    <button class="clock-button plus-button">+1</button>
+                </div>
+                <div class="space"></div>
+                <button id="back-btn-2">👈</button>
+                <button id="jump-to-timer">Jump to the timer! ⏳</button>
+            </div>
+            <div class="page page-4 page-next">
+                <h2 id="mob-name-show"></h2>
+                <h4 onclick="checkBox(event)" id="auto-start">Auto start next</h4>
+                <h4 onclick="checkBox(event)" id="notify-me">Notify me</h4>
+                <div id="members-with-timers"></div>
+                <div class="space"></div>
+                <button id="back-btn-3">👈</button>
+            </div>
+        </div>
+    </div>
+    <div id="background-fade"></div>
+    <script src="index.js"></script>
+</body>
+
+</html>
