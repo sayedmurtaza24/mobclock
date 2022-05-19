@@ -22,6 +22,26 @@ let interval;
 let currentTime = 0;
 let autoStart = false;
 let notify = false;
+let members = [];
+let timerTime = 1;
+let mobName = "";
+
+const setExactInterval = function(callback, duration, resolution) {
+	const start = (new Date()).getTime();
+    let loopNo = 1;
+	const timeout = setInterval(() => {
+		if((new Date()).getTime() - start > duration * loopNo) {
+            callback()
+            loopNo++;
+        }
+	}, resolution);
+
+	return timeout;
+};
+
+const clearExactInterval = function(timeout) {
+	clearInterval(timeout);
+};
 
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.substring(1);
@@ -64,7 +84,6 @@ const playSound = () => {
     new Audio('sound.mp3').play();
 }
 const sendNotification = (index) => {
-    const members = JSON.parse(localStorage.getItem('mob-members'));
     let member;
     if (members.length - 1 === index) {
         member = members[0];
@@ -82,8 +101,8 @@ const sendNotification = (index) => {
 function runTimerAndUpdate(index) {
     const timerElement = getActiveTimerElement();
     let width = '0%';
-    const stopTime = parseInt(localStorage.getItem('mob-timer')) * 60000;
-    interval = setInterval(() => {
+    const stopTime = timerTime * 60000;
+    interval = setExactInterval(() => {
         currentTime += 1000;
         width = `${((currentTime / stopTime) * 100).toFixed(1)}%`;
         timerElement.style.width = width;
@@ -98,13 +117,13 @@ function runTimerAndUpdate(index) {
                 runTimerAndUpdate(next);
             }
         }
-    }, 1000)
+    }, 1000, 50)
 }
 
 function onPauseClick(index) {
     const pauseBtn = getActivePauseBtnElement()
     if (pauseBtn.innerHTML === 'Pause') {
-        if (interval) clearInterval(interval);
+        if (interval) clearExactInterval(interval);
         pauseBtn.innerHTML = 'Start';
     }
     else {
@@ -116,7 +135,7 @@ function onPauseClick(index) {
 function onSkipClick(index) {
     currentTime = 0;
     if (interval) {
-        clearInterval(interval);
+        clearExactInterval(interval);
         const pauseBtn = getActivePauseBtnElement();
         if (pauseBtn.innerHTML === 'Pause') {
             pauseBtn.innerHTML = 'Start';
@@ -132,7 +151,6 @@ function onSkipClick(index) {
 }
 
 function compileMembersListWithTimers() {
-    const members = JSON.parse(localStorage.getItem('mob-members'));
     membersWithTimers.innerHTML = "";
     for (let i = 0; i < members.length; i++) {
         const member = members[i];
@@ -187,26 +205,24 @@ function checkBox(e) {
 
 const goToSecondPage = () => {
     if (!mobNameInput.value.trim()) return alert('Please enter your mob name!')
-    localStorage.setItem('mob-name', capitalize(mobNameInput.value));
+    mobName = capitalize(mobNameInput.value)
     transitionToPage(page2, page1);
-    // setTimeout(() => mobMember.focus(), 300)
 }
 
 goAheadBtn.addEventListener('click', goToSecondPage)
 mobNameInput.addEventListener('keypress', (e) => e.key === "Enter" ? goToSecondPage() : null);
 
 jumpAheadBtn.addEventListener('click', () => {
-    const members = compileMembersList()
+    members = compileMembersList()
     if (members.length === 0) return alert('Please add mob members before moving forward!');
-    localStorage.setItem('mob-members', JSON.stringify(members));
     transitionToPage(page3, page2)
 })
 
 jumpToTimerBtn.addEventListener('click', () => {
-    localStorage.setItem('mob-timer', parseInt(timerMinutes.innerHTML));
+    timerTime = parseInt(timerMinutes.innerHTML);
     transitionToPage(page4, page3);
     compileMembersListWithTimers();
-    document.querySelector("#mob-name-show").textContent = `Let's do this ${localStorage.getItem('mob-name')} 😍`
+    document.querySelector("#mob-name-show").textContent = `Let's do this ${mobName} 😍`
 })
 
 backBtnPage2.addEventListener('click', () => goBackToPage(page1, page2))
